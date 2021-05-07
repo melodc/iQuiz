@@ -61,8 +61,9 @@ extension ViewController: UITableViewDataSource {
         cell.imageView?.image = UIImage(named: subjects[indexPath.row])
         cell.textLabel?.text = subjects[indexPath.row]
         cell.detailTextLabel?.text = descriptions[indexPath.row]
+        
+        // line break for detail text
         cell.detailTextLabel?.numberOfLines = 0
-
         cell.detailTextLabel?.lineBreakMode = .byWordWrapping
 
         return cell
@@ -71,6 +72,8 @@ extension ViewController: UITableViewDataSource {
 
 class MyTableViewCell: UITableViewCell {
 
+    // resize table cell height to be based on the height of
+    // subtitle label in cell
     override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
 
         self.layoutIfNeeded()
