@@ -64,6 +64,7 @@ class GameViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "answer", for: indexPath)
         cell.textLabel?.text = currQuestion?.answers[indexPath.row].text
+        cell.textLabel?.numberOfLines = 0;
         return cell
     }
     
@@ -168,7 +169,7 @@ var marvelQuestions: [Question] = [
 var scienceQuestions: [Question] = [
     Question(text: "What is the nearest planet to the sun?", answers: [Answer(text: "Mercury", correct: true), Answer(text: "Venus", correct: true), Answer(text: "Earth", correct: false), Answer(text: "Mars", correct: false)]),
     Question(text: "How many teeth does an adult human have?", answers: [Answer(text: "24", correct: false), Answer(text: "32", correct: true), Answer(text: "36", correct: false), Answer(text: "40", correct: false)]),
-    Question(text: "What is 51 / 17?", answers: [Answer(text: "1", correct: false), Answer(text: "2.5", correct: false), Answer(text: "3", correct: true), Answer(text: "34", correct: false)]),
+    Question(text: "What is the hardest known natural material?", answers: [Answer(text: "Steel", correct: false), Answer(text: "Ruby", correct: false), Answer(text: "Diamond", correct: true), Answer(text: "Gold", correct: false)]),
     Question(text: "What is the hottest planet in the solar system?", answers: [Answer(text: "Mercury", correct: false), Answer(text: "Venus", correct: true), Answer(text: "Earth", correct: false), Answer(text: "Mars", correct: false)]),
     Question(text: "What is the rarest blood type?", answers: [Answer(text: "A positive", correct: false), Answer(text: "B negative", correct: false), Answer(text: "AB positive", correct: false), Answer(text: "AB negative", correct: true)]),
     Question(text: "What’s the boiling point of water?", answers: [Answer(text: "100 degrees Celcius", correct: true), Answer(text: "101 degrees Celcius", correct: false), Answer(text: "212 degrees Celcius", correct: true), Answer(text: "500 degrees Celcius", correct: false)]),
@@ -248,6 +249,18 @@ class FinishedViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if currScore == 0 {
+            desc.text = "There's no way you got everything wrong..."
+        } else if currScore < 4 {
+            desc.text = "There's lots of room for improvement!"
+        } else if currScore < 8 {
+            desc.text = "Better luck next time!"
+        } else if currScore == 9 {
+            desc.text = "Almost!"
+        } else {
+            desc.text = "Perfect!"
+        }
         
         scoreLabel.text = "Score: \(String(currScore)) correct out of \(String(totalQuestions)) questions"
     }
