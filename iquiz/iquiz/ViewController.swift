@@ -45,16 +45,11 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            print("you tapped on the first row")
-            let vc = storyboard?.instantiateViewController(identifier: "game") as! GameViewController
-            vc.subject = "math"
-            vc.currQuestionNum = 0
-            vc.modalPresentationStyle = .fullScreen
-            present(vc, animated: true)
-        } else {
-            // do something when any other row is tapped
-        }
+        let vc = storyboard?.instantiateViewController(identifier: "game") as! GameViewController
+        vc.subject = subjects[indexPath.row]
+        vc.currQuestionNum = 0
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
     }
 }
 
