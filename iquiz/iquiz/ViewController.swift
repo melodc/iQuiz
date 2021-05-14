@@ -45,7 +45,16 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("You tapped me!")
+        if indexPath.row == 0 {
+            print("you tapped on the first row")
+            let vc = storyboard?.instantiateViewController(identifier: "game") as! GameViewController
+            vc.subject = "math"
+            vc.currQuestionNum = 0
+            vc.modalPresentationStyle = .fullScreen
+            present(vc, animated: true)
+        } else {
+            // do something when any other row is tapped
+        }
     }
 }
 
@@ -68,6 +77,7 @@ extension ViewController: UITableViewDataSource {
 
         return cell
     }
+    
 }
 
 class MyTableViewCell: UITableViewCell {
