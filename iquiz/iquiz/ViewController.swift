@@ -45,11 +45,28 @@ class ViewController: UIViewController {
                 textField.placeholder = "Enter URL containing JSON file"
             }
         
-        let checkNow = UIAlertAction(title: "Check Now", style: UIAlertAction.Style.default, handler: { alert -> Void in
+        let checkNow = UIAlertAction(title: "Check Now", style: UIAlertAction.Style.destructive, handler: { alert -> Void in
                 let input = alertController.textFields![0] as UITextField
+            if input.text == nil {
+                // check for fundamental networking error
+                let emptyInputDialog = UIAlertController(title: "Error", message: "You must enter a valid URL", preferredStyle: UIAlertController.Style.alert)
+                self.present(emptyInputDialog, animated: true, completion: nil)
+                return
+                
+            }
+            
             if let url = URL(string: input.text!) {
                 URLSession.shared.dataTask(with: url) { [self] data, response, error in
+
                 if let data = data {
+                    guard error == nil else {
+                    // notify user if network is not available
+                        let networkErrorDialog = UIAlertController(title: "Error", message: "User is not connected to a network", preferredStyle: UIAlertController.Style.alert)
+                        self.present(networkErrorDialog, animated: true, completion: nil)
+                        return
+                    
+                    }
+                    
                     let jsonDecoder = JSONDecoder()
                     do {
                         let decodedData = try jsonDecoder.decode([Subject].self, from: data)
@@ -66,7 +83,11 @@ class ViewController: UIViewController {
                                 self.tableView.reloadData()
                         }
                     } catch {
-                        print(error)
+                        //display an error dialog if download fails
+                        print(error.localizedDescription)
+                        let errorDialog = UIAlertController(title: "Error", message: "Download failed!", preferredStyle: UIAlertController.Style.alert)
+                        self.present(errorDialog, animated: true, completion: nil)
+
                     }
                 }
             }.resume()
@@ -121,30 +142,3 @@ extension ViewController: UITableViewDataSource {
     }
     
 }
-
-//class MyTableViewCell: UITableViewCell {
-//
-//    // resize table cell height to be based on the height of
-//    // subtitle label in cell
-//    override func systemLayoutSizeFitting(_ targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
-//
-//        self.layoutIfNeeded()
-//        var size = super.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
-//
-//        if let textLabel = self.textLabel, let detailTextLabel = self.detailTextLabel {
-//            let detailHeight = detailTextLabel.frame.size.height
-//            if detailTextLabel.frame.origin.x > textLabel.frame.origin.x { // style = Value1 or Value2
-//                let textHeight = textLabel.frame.size.height
-//                if (detailHeight > textHeight) {
-//                    size.height += detailHeight - textHeight
-//                }
-//            } else { // style = Subtitle, so always add subtitle height
-//                size.height += detailHeight
-//            }
-//        }
-//
-//        return size
-//
-//    }
-//
-//}
